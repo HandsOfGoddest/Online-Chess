@@ -58,12 +58,20 @@ class Board:
         ]
 
         self.selected = None  # Stores Selected piece
+        self.availableMove= [[False,False,False,False,False,False,False,False],
+                            [False,False,False,False,False,False,False,False],
+                            [False,False,False,False,False,False,False,False],
+                            [False,False,False,False,False,False,False,False],
+                            [False,False,False,False,False,False,False,False],
+                            [False,False,False,False,False,False,False,False],
+                            [False,False,False,False,False,False,False,False],
+                            [False,False,False,False,False,False,False,False]]
 
         self.turn = 1  # 1 means its white's turn
 
         self.king = [self.board[0][4], self.board[7][4]]  # To check for "Checks" after every move
 
-        self.check = False
+        self.check = (-1, -1) 
         self.check_mate = False
         self.game_over = False
 
@@ -104,8 +112,35 @@ class Board:
                 self.board[my][mx].select()
                 if self.board[my][mx].selected:
                     self.selected = (my, mx)
+                    self.what_move_is_possible()
                 else:
                     self.selected = None
+                    self.availableMove = [[False,False,False,False,False,False,False,False],
+                                          [False,False,False,False,False,False,False,False],
+                                          [False,False,False,False,False,False,False,False],
+                                          [False,False,False,False,False,False,False,False],
+                                          [False,False,False,False,False,False,False,False],
+                                          [False,False,False,False,False,False,False,False],
+                                          [False,False,False,False,False,False,False,False],
+                                          [False,False,False,False,False,False,False,False]]
+                    
+        elif self.selected and not self.is_move_possible(self.selected, (my, mx)) and self.is_player_piece((my, mx)):
+            self.board[self.selected[0]][self.selected[1]].select()
+            self.board[my][mx].select()
+            if self.board[my][mx].selected:
+                self.selected = (my, mx)
+                self.what_move_is_possible()
+            else:
+                self.selected = None
+                self.availableMove = [[False,False,False,False,False,False,False,False],
+                                        [False,False,False,False,False,False,False,False],
+                                        [False,False,False,False,False,False,False,False],
+                                        [False,False,False,False,False,False,False,False],
+                                        [False,False,False,False,False,False,False,False],
+                                        [False,False,False,False,False,False,False,False],
+                                        [False,False,False,False,False,False,False,False],
+                                        [False,False,False,False,False,False,False,False]]
+            print(self.selected)
         else:
             if self.is_move_possible(self.selected, (my, mx)):
 
@@ -115,6 +150,7 @@ class Board:
                 # Unselect the moved piece
                 self.board[my][mx].select()
                 self.selected = None
+        
 
     def is_move_possible(self, source, dest):
         """
@@ -145,6 +181,19 @@ class Board:
         self.board[dy][dx], self.board[sy][sx] = dest_piece, source_piece
 
         return is_valid_move
+    
+    def what_move_is_possible(self):
+        """
+        Check if possible to move piece from source to dest
+        :param source: Coordinates of source piece (int, int)
+        :param dest: Coordinates of dest piece (int, int)
+        :return: bool
+        """
+        for i in range(8):
+            for j in range(8):
+                self.availableMove[i][j] = self.is_move_possible(self.selected, (i, j))
+
+        
 
     def move(self, source, dest, history=True):
         """
@@ -155,7 +204,7 @@ class Board:
         :return: Captured Piece
         """
 
-        self.check = False
+        self.check = (-1, -1)
 
         sy, sx = source
         dy, dx = dest
@@ -172,7 +221,8 @@ class Board:
         self.turn ^= 1
 
         if self.in_check(self.turn):
-            self.check = True
+            
+            self.check = (self.king[self.turn].py, self.king[self.turn].px)
             if self.in_checkmate():
                 self.check_mate = True
                 self.game_over = True

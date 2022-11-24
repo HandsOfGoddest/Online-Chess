@@ -213,6 +213,8 @@ class Game:
                     player.disconnect()
             elif board.game_over and board.check_mate:
                 message1.change_text('Check Mate')
+                self.draw_rect_alpha(self.win, (255, 0, 0, 127), (board.check[1]* 85, board.check[0]* 85 , 85, 85))    
+
                 message2.change_text(f'{"Black" if board.turn == 1 else "White"} Wins')
                 if online:
                     player.disconnect()
@@ -220,13 +222,19 @@ class Game:
                 message2.change_text('Other Player Left')
                 if online:
                     player.disconnect()
-            elif board.check:
+            elif board.check != (-1, -1):
                 message1.change_text('Check')
+                self.draw_rect_alpha(self.win, (255, 0, 0, 127), (board.check[1]* 85, board.check[0]* 85 , 85, 85))    
             else:
                 message1.change_text('')
                 message2.change_text('')
 
             pg.display.update()
+            
+    def draw_rect_alpha(self,surface, color, rect):
+        shape_surf = pg.Surface(pg.Rect(rect).size, pg.SRCALPHA)
+        pg.draw.rect(shape_surf, color, shape_surf.get_rect())
+        surface.blit(shape_surf, rect)
 
     def draw(self, board):
         for i in range(8):
@@ -237,8 +245,12 @@ class Game:
 
                     # Highlight the block if selected
                     if board.board[i][j].selected:
-                        pg.draw.rect(self.win, (255, 214, 107), (x, y, 85, 85))
-
+                        self.draw_rect_alpha(self.win, (255, 255, 0, 127), (x, y, 85, 85)) 
+                        for u in range(8):
+                            for v in range(8):    
+                                if board.availableMove[u][v] == True:
+                                    self.draw_rect_alpha(self.win, (255, 255, 0, 127), (v* 85, u* 85 , 85, 85))                              
+                        
                     img = pg.image.load(f'./assets/pieces/{board.board[i][j]}.png')
                     img = pg.transform.scale(img, (85, 85))
 
