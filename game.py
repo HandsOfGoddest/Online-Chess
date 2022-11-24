@@ -20,7 +20,7 @@ class Game:
         bg = pg.image.load('./assets/bg.jpg')
         bg = pg.transform.scale(bg, (self.win_width, self.win_height))
 
-        new_game_button = Button('NEW GAME', (100, 150, 250, 50), self.game_page)
+        new_game_button = Button('NEW GAME', (100, 150, 250, 50), self.level_page)
         new_game_button.config(
             hover=(25, 25, 25)
         )
@@ -60,6 +60,50 @@ class Game:
 
             pg.display.update()
 
+    def level_page(self):
+        bg = pg.image.load('./assets/bg.jpg')
+        bg = pg.transform.scale(bg, (self.win_width, self.win_height))
+
+        easy_button = Button('EASY', (100, 150, 250, 50), lambda: self.game_page(1))
+        easy_button.config(
+            hover=(25, 25, 25)
+        )
+
+        normal_button = Button('NORMAL', (100, 225, 250, 50), lambda: self.game_page(2))
+        normal_button.config(
+            hover=(25, 25, 25)
+        )
+
+        hard_button = Button('HARD', (100, 300, 250, 50), lambda: self.game_page(3))
+        hard_button.config(
+            hover=(25, 25, 25)
+        )
+
+        while True:
+
+            self.win.blit(bg, (0, 0))
+
+            easy_button.draw(self.win)
+            normal_button.draw(self.win)
+            hard_button.draw(self.win)
+
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.quit()
+
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    easy_button.collide(event.pos)
+                    normal_button.collide(event.pos)
+                    hard_button.collide(event.pos)
+
+            mouse = pg.mouse.get_pos()
+
+            easy_button.mouseover(self.win, mouse)
+            normal_button.mouseover(self.win, mouse)
+            hard_button.mouseover(self.win, mouse)
+
+            pg.display.update()
+
     def loading_page(self):
         self.win.fill((0, 0, 0))
         loading = Label('Finding Player...')
@@ -69,7 +113,7 @@ class Game:
         loading.draw(self.win, rect.x, rect.y)
         pg.display.update()
 
-    def game_page(self, online=False):
+    def game_page(self, depth, online=False):
 
         self.loading_page()
 
@@ -174,7 +218,7 @@ class Game:
                 user.draw(self.win, 790, 550)
 
             if not online and not board.turn:
-                self.call_ai(board)
+                self.call_ai(board, depth)
 
             for event in pg.event.get():
                 if event.type == pg.QUIT:
@@ -249,9 +293,9 @@ class Game:
         return f'{chr(97 + mx)}{my + 1}'
 
     @staticmethod
-    def call_ai(board):
+    def call_ai(board, depth):
         if not board.game_over and not board.turn:
-            get_best_move(board, board.turn)
+            get_best_move(board, board.turn, depth)
 
     @staticmethod
     def quit():
