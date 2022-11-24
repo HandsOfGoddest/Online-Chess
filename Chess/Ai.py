@@ -197,7 +197,7 @@ def minimax(board, depth, alpha, beta):
     return points
 
 
-def get_best_move(board, turn):
+def get_best_move(board, turn, depth):
     turn ^= 1
     points = -INF
 
@@ -211,7 +211,7 @@ def get_best_move(board, turn):
             if board.is_move_possible((sy, sx), (dy, dx)):
                 captured_piece = board.move((sy, sx), (dy, dx), history=False)
 
-                res_points = minimax(board, 2, -INF, INF)
+                res_points = minimax(board, depth, -INF, INF)
 
                 if res_points > points:
                     points = res_points
