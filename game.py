@@ -9,7 +9,7 @@ from Chess.Ai import get_best_move
 class Game:
     def __init__(self):
         pg.init()
-
+        
         self.win_width = 1000
         self.win_height = 680
 
@@ -20,19 +20,19 @@ class Game:
         bg = pg.image.load('./assets/bg.jpg')
         bg = pg.transform.scale(bg, (self.win_width, self.win_height))
 
-        new_game_button = Button('NEW GAME', (100, 150, 250, 50), self.level_page)
+        new_game_button = Button('NEW GAME', (700, 150, 250, 50), self.level_page)
         new_game_button.config(
-            hover=(25, 25, 25)
+            hover=(51, 204, 51)
         )
 
-        play_online_button = Button('PLAY ONLINE', (100, 225, 250, 50), lambda: self.game_page(online=True))
+        play_online_button = Button('PLAY ONLINE', (700, 225, 250, 50), lambda: self.game_page(online=True))
         play_online_button.config(
-            hover=(25, 25, 25)
+            hover=(0, 0, 255)
         )
 
-        quit_game_button = Button('QUIT', (100, 300, 250, 50), self.quit)
+        quit_game_button = Button('QUIT', (700, 300, 250, 50), self.quit)
         quit_game_button.config(
-            hover=(25, 25, 25)
+            hover=(255, 0, 0)
         )
 
         while True:
@@ -64,19 +64,19 @@ class Game:
         bg = pg.image.load('./assets/bg.jpg')
         bg = pg.transform.scale(bg, (self.win_width, self.win_height))
 
-        easy_button = Button('EASY', (100, 150, 250, 50), lambda: self.game_page(1))
+        easy_button = Button('EASY', (700, 150, 250, 50), lambda: self.game_page(1))
         easy_button.config(
-            hover=(25, 25, 25)
+            hover=(51, 204, 51)
         )
 
-        normal_button = Button('NORMAL', (100, 225, 250, 50), lambda: self.game_page(2))
+        normal_button = Button('NORMAL', (700, 225, 250, 50), lambda: self.game_page(2))
         normal_button.config(
-            hover=(25, 25, 25)
+            hover=(255, 255, 0)
         )
 
-        hard_button = Button('HARD', (100, 300, 250, 50), lambda: self.game_page(3))
+        hard_button = Button('HARD', (700, 300, 250, 50), lambda: self.game_page(3))
         hard_button.config(
-            hover=(25, 25, 25)
+            hover=(255, 0, 0)
         )
 
         while True:

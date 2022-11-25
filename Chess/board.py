@@ -213,7 +213,14 @@ class Board:
         dest_piece = self.board[dy][dx]
 
         source_piece.move_position(dx, dy)
-        self.board[dy][dx], self.board[sy][sx] = source_piece, None
+        if source_piece.__class__.__name__ == "Pawn" and source_piece.color == "w" and dy == 0:
+            self.board[dy][dx] = Queen("w", dy, dx)
+            self.board[sy][sx] = None
+        elif source_piece.__class__.__name__ == "Pawn" and source_piece.color == "b" and dy == 7:
+            self.board[dy][dx] = Queen("b", dy, dx)
+            self.board[sy][sx] = None
+        else:
+            self.board[dy][dx], self.board[sy][sx] = source_piece, None
 
         if history:
             self.history.append((self.turn, source, dest))
@@ -226,6 +233,8 @@ class Board:
             if self.in_checkmate():
                 self.check_mate = True
                 self.game_over = True
+                
+        
 
         return dest_piece
 
