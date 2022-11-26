@@ -20,12 +20,12 @@ class Game:
         bg = pg.image.load('./assets/bg.jpg')
         bg = pg.transform.scale(bg, (self.win_width, self.win_height))
 
-        new_game_button = Button('NEW GAME', (700, 150, 250, 50), self.level_page)
+        new_game_button = Button('vs AI', (700, 150, 250, 50), self.level_page)
         new_game_button.config(
             hover=(51, 204, 51)
         )
 
-        play_online_button = Button('PLAY ONLINE', (700, 225, 250, 50), lambda: self.game_page(online=True))
+        play_online_button = Button('PvsP ONLINE', (700, 225, 250, 50), lambda: self.game_page(online=True))
         play_online_button.config(
             hover=(0, 0, 255)
         )
@@ -117,18 +117,18 @@ class Game:
 
         self.loading_page()
 
-        self.win.fill((255, 0, 0))
+        self.win.fill((240, 240, 240))
 
         bg = pg.image.load('./assets/board.jpg')
         bg = pg.transform.scale(bg, (680, self.win_height))
 
-        computer = Label('Computer')
+        computer = Label('AI')
         computer.config(
             color=(57, 62, 70),
             font_size=54
         )
 
-        user = Label('User')
+        user = Label('Player')
         user.config(
             color=(240, 240, 240),
             font_size=54
@@ -196,9 +196,9 @@ class Game:
                 black_time.change_text(f'{b_time // 60}:{ f"0{b_time % 60}" if b_time % 60 < 10 else b_time % 60}')
                 black_time.draw(self.win, 800, 100)
             else:
-                computer.draw(self.win, 750, 20)
+                computer.draw(self.win, 825, 20)
 
-            pg.draw.rect(self.win, (255, 0, 0), (690, 150, 310, 10))  # Red Line
+            pg.draw.rect(self.win, (240, 240, 240), (690, 150, 310, 10))  # Red Line
 
             board_message1 = message1.get_rect()
             board_message1.center = (680 + 160, 200)
@@ -208,7 +208,7 @@ class Game:
             board_message2.center = (680 + 160, 250)
             message2.draw(self.win, board_message2.x, board_message2.y)
 
-            pg.draw.rect(self.win, (255, 0, 0), (690, 530, 310, 10))  # Red Line
+            pg.draw.rect(self.win, (240, 240, 240), (690, 530, 310, 10))  # Red Line
 
             if online:
                 white_timer.draw(self.win, 780, 550)
